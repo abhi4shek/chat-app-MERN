@@ -15,10 +15,12 @@ export const SocketContextProvider = ({ children }) => {
 
 	useEffect(() => {
 		if (authUser) {
-			const socket = io("http://localhost:5500", {
+			const socket = io("https://chat-app-mern-nawb.onrender.com", {
 				query: {
 					userId: authUser._id,
 				},
+				transports: ["websocket"], // Force WebSocket (Avoid long polling)
+				withCredentials: true, // Important for auth-based apps
 			});
 
 			setSocket(socket);
@@ -37,5 +39,5 @@ export const SocketContextProvider = ({ children }) => {
 		}
 	}, [authUser]);
 
-	return <SocketContext.Provider value={{ socket, onlineUsers }}>{children}</SocketContext.Provider>;
+	return ( <SocketContext.Provider value={{ socket, onlineUsers }}>{children}</SocketContext.Provider> );
 };
